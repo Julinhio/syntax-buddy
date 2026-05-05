@@ -702,6 +702,34 @@
             .cta-form { flex-direction: column; }
             .cta-input { border-right: 1px solid var(--border); border-bottom: none; }
         }
+    #back-to-top {
+        position: fixed;
+        bottom: 96px;
+        right: 32px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--green);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s, background 0.2s, transform 0.2s, box-shadow 0.2s;
+        z-index: 999;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    }
+    #back-to-top.visible { opacity: 1; pointer-events: auto; }
+    #back-to-top:hover {
+        background: var(--green-dark);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    }
     </style>
 </head>
 <body>
@@ -715,7 +743,7 @@
         <li><a href="#why">About</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="#contact" class="nav-cta">Get in touch →</a>
+    <a href="mailto:contact@syntaxbuddy.io" id="nav-cta-email" class="nav-cta">Get in touch →</a>
 </nav>
 
 <!-- HERO -->
@@ -953,10 +981,11 @@
     <div class="footer-copy">© 2025 Syntax Buddy · syntax-buddy.io</div>
     <ul class="footer-links">
         <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="mailto:hello@syntax-buddy.io">hello@syntax-buddy.io</a></li>
+        <li><a id="footer-email" href="mailto:contact@syntaxbuddy.io">Contact</a></li>
     </ul>
 </footer>
+
+<button id="back-to-top" aria-label="Back to top">↑</button>
 
 <script>
     // Nav scroll border
@@ -1024,6 +1053,22 @@
         e.target.reset();
         setTimeout(() => { msg.style.opacity = '0'; }, 4000);
     }
+
+    // Email obfuscation (base64)
+    (function() {
+        const e = atob('anVsaWVuQHN5bnRheGJ1ZGR5Lmlv');
+        const navLink = document.getElementById('nav-cta-email');
+        if (navLink) navLink.href = 'mailto:' + e;
+        const footerLink = document.getElementById('footer-email');
+        if (footerLink) footerLink.href = 'mailto:' + e;
+    })();
+
+    // Back to top
+    const btt = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        btt.classList.toggle('visible', window.scrollY > 300);
+    }, { passive: true });
+    btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 </script>
 </body>
 </html>
